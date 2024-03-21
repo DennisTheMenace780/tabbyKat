@@ -13,7 +13,7 @@ jobs:
           go-version: '1.22.x'
 
       - name: Init TestRepo git sub repo
-        run: ./bin/init_ci_test_repo.sh
+        run: ./bin/init_test_repo.sh
 
       - name: Check if repo was created
         run: |
