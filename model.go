@@ -45,17 +45,13 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 				out, err := exec.Command("git", "checkout", m.choice).CombinedOutput()
 				if err != nil {
-                    log.Print("Git Checkout Error:", err)
-                    log.Print("branch: ", m.choice)
+                    log.Print("Error", err)
 				}
-				log.Printf("Output: \n%s", out)
                 m.err = string(out)
 			}
 			return m, tea.Quit
 		}
-
 	}
-
 	var cmd tea.Cmd
 	m.list, cmd = m.list.Update(msg)
 	return m, cmd

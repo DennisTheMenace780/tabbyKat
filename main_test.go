@@ -68,13 +68,34 @@ func TestOutput(t *testing.T) {
 		}
 		teatest.RequireEqualOutput(t, out)
 	})
+
+	t.Run("Move down fully and select last branch", func(t *testing.T) {
+
+		model := initModel([]string{"branch-1", "branch-2", "branch-3", "master"})
+
+		tm := teatest.NewTestModel(t, model, teatest.WithInitialTermSize(300, 100))
+
+		// Assert that the program, at some point, has the following byte string ... make a helper function?
+		teatest.WaitFor(t, tm.Output(),
+			func(bts []byte) bool {
+				return bytes.Contains(
+					bts,
+					[]byte("1. branch-1"),
+				)
+			},
+		)
+
+		moveDownAndSelectBranch(tm, 10)
+
+		tm.WaitFinished(t, teatest.WithFinalTimeout(time.Second))
+
+		out, err := io.ReadAll(tm.FinalOutput(t))
+		if err != nil {
+			t.Error("Error reading from FinalOutput", err)
+		}
+		teatest.RequireEqualOutput(t, out)
+	})
 }
-//
-// func tearDownGitTestRepository() {
-// 	cmd := exec.Command("rm", "-rf", "TestOutput")
-// 	cmd.Dir = "./testdata/"
-// 	cmd.Run()
-// }
 
 func resetBranchAfterTest() {
 	cmd := exec.Command("git", "checkout", "branch-1")

@@ -12,11 +12,15 @@ jobs:
         with:
           go-version: '1.22.x'
 
-      - name: Init testdata/TestRepo repository
-        run: ./scripts/ci/create_test_repo.sh
+      - name: Init TestRepo git sub repo
+        run: ./bin/create_test_repo.sh
 
       - name: Check if repo was created
-        run: ls -la testdata/TestRepo
+        run: |
+          if [ ! -d "TestRepo" ]; then
+            echo "TestRepo directory does not exist."
+            exit 1
+          fi
 
       - name: Build Step
         run: go build -v ./...
