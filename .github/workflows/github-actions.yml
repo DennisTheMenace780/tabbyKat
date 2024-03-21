@@ -28,5 +28,8 @@ jobs:
       - name: Install Dependencies
         run: go get .
 
+      - name: Create Bubble Tea Golden Files
+        run: go test -v ./... -update
+
       - name: Run Tests
         run: go test -v ./...
