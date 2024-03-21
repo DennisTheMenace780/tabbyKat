@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"strings"
 
 	tea "github.com/charmbracelet/bubbletea"
 )
@@ -37,6 +38,10 @@ func main() {
 		// Read line by line and process it
 		for scanner.Scan() {
 			line := scanner.Text()
+			if strings.Contains(line, "not a git repository") {
+                fmt.Println(line)
+                os.Exit(1)
+			}
 			branches = append(branches, line)
 		}
 		// We're all done, unblock the channel
@@ -45,18 +50,21 @@ func main() {
 	// Start the command and check for errors
 	err := cmd.Start()
 	if err != nil {
-		log.Print("Error", err)
+		log.Fatal("Error: ", err)
 	}
 
 	// Wait for all output to be processed
 	<-done
 
 	branchItems := BuildItems(branches)
+	if err != nil {
+        log.Print("Error: ", err)
+	}
 	l := ListBuilder(branchItems)
 
 	err = cmd.Wait()
 	if err != nil {
-		log.Print("Error", err)
+		log.Print("Error: ", err)
 	}
 
 	if _, err := tea.NewProgram(Model{list: l}).Run(); err != nil {

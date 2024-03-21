@@ -45,7 +45,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 				out, err := exec.Command("git", "checkout", m.choice).CombinedOutput()
 				if err != nil {
-                    log.Print("Error", err)
+                    log.Fatal("Checkout Error: ", err)
 				}
                 m.err = string(out)
 			}
