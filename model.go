@@ -62,7 +62,7 @@ func (m Model) View() string {
         return QuitCheckoutStyle.Render(m.err)
     }
 	if m.choice != "" {
-		return QuitTextStyle.Render(fmt.Sprintf("switched to branch '%s'", m.choice))
+        return fmt.Sprintf("switch to branch '%s'", m.choice)
 	}
 	if m.quitting {
 		return QuitTextStyle.Render("Not hungry? That’s cool.")
