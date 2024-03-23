@@ -21,11 +21,6 @@ func (m Model) Init() tea.Cmd {
 	return nil
 }
 
-func processBranchString(s string) string {
-	str := strings.TrimLeft(s, "*")
-	return strings.TrimSpace(str)
-}
-
 func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
@@ -41,13 +36,15 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case "enter":
 			i, ok := m.list.SelectedItem().(Item)
 			if ok {
-				m.choice = processBranchString(string(i))
+				branch := strings.TrimLeft(string(i), "*")
+				m.choice = strings.TrimSpace(branch)
 
 				out, err := exec.Command("git", "checkout", m.choice).CombinedOutput()
+                fmt.Println("OUT", out)
 				if err != nil {
-                    log.Fatal("Checkout Error: ", err)
+					log.Fatal("Checkout Error: ", err)
 				}
-                m.err = string(out)
+				m.err = string(out)
 			}
 			return m, tea.Quit
 		}
@@ -58,11 +55,12 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m Model) View() string {
-    if m.err != "" {
-        return QuitCheckoutStyle.Render(m.err)
-    }
+
+	if m.err != "" {
+		return QuitCheckoutStyle.Render(m.err)
+	}
 	if m.choice != "" {
-        return fmt.Sprintf("switch to branch '%s'", m.choice)
+		return fmt.Sprintf("switch to branch '%s'", m.choice)
 	}
 	if m.quitting {
 		return QuitTextStyle.Render("Not hungry? That’s cool.")
