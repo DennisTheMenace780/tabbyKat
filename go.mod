@@ -1,6 +1,6 @@
-module tabbykat
+module github.com/DennisTheMenace780/tabbykat
 
-go 1.21.0
+go 1.22.1
 
 require (
 	github.com/charmbracelet/bubbles v0.16.1

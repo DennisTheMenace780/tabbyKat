@@ -12,6 +12,7 @@ import (
 )
 
 func init() {
+    // Will run at startup and log to a file
 	if len(os.Getenv("DEBUG")) > 0 {
 		f, err := tea.LogToFile("debug.log", "debug")
 		if err != nil {
@@ -25,7 +26,10 @@ func init() {
 func main() {
 	cmd := exec.Command("git", "branch")
 	// Get a pipe to read from standard out
-	r, _ := cmd.StdoutPipe()
+	r, err := cmd.StdoutPipe()
+    if err != nil {
+        log.Fatalf("Error creating stdout pipe: %s", err)
+    }
 	cmd.Stderr = cmd.Stdout
 	// Make a new channel which will be used to ensure we get all output
 	done := make(chan struct{})
@@ -48,7 +52,7 @@ func main() {
 		done <- struct{}{}
 	}()
 	// Start the command and check for errors
-	err := cmd.Start()
+	err = cmd.Start()
 	if err != nil {
 		log.Fatal("Error: ", err)
 	}
