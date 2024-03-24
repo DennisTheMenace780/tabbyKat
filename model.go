@@ -67,7 +67,7 @@ func (m Model) View() string {
 	// 	return QuitCheckoutStyle.Render(m.err)
 	// }
 	if m.choice != "" {
-		return ""
+		return QuitCheckoutStyle.Render("checking out")
 	}
 	// if m.quitting {
 	// 	return QuitTextStyle.Render("Not hungry? That’s cool.")
