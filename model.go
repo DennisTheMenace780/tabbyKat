@@ -62,14 +62,14 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m Model) View() string {
-	if m.err != "" {
-		return QuitCheckoutStyle.Render(m.err)
-	}
-	if m.choice != "" {
-		return QuitCheckoutStyle.Render(fmt.Sprintf("Switched to branch '%s'", m.choice))
-	}
-	if m.quitting {
-		return QuitTextStyle.Render("Not hungry? That’s cool.")
-	}
+	// if m.err != "" {
+	// 	return QuitCheckoutStyle.Render(m.err)
+	// }
+	// if m.choice != "" {
+	// 	return QuitCheckoutStyle.Render(fmt.Sprintf("Switched to branch '%s'", m.choice))
+	// }
+	// if m.quitting {
+	// 	return QuitTextStyle.Render("Not hungry? That’s cool.")
+	// }
 	return "\n" + m.list.View()
 }
