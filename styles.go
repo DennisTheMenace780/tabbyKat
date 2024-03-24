@@ -8,7 +8,6 @@ import (
 const ListHeight = 14
 const DefaultWidth = 20
 const TitleDescription = "Checkout branch:"
-
 var (
 	TitleStyle        = lipgloss.NewStyle().MarginLeft(2)
 	ItemStyle         = lipgloss.NewStyle().PaddingLeft(4)
@@ -16,6 +15,6 @@ var (
 	PaginationStyle   = list.DefaultStyles().PaginationStyle.PaddingLeft(4)
 	HelpStyle         = list.DefaultStyles().HelpStyle.PaddingLeft(4).PaddingBottom(1)
 	QuitTextStyle     = lipgloss.NewStyle().Margin(1, 0, 2, 4)
-	QuitCheckoutStyle = lipgloss.NewStyle()
+	QuitCheckoutStyle = lipgloss.NewStyle().Margin(1)
 	ModifiedFiles     = lipgloss.NewStyle().PaddingLeft(8).Foreground(lipgloss.Color("002"))
 )

@@ -1,11 +1,9 @@
 package main
 
 import (
-	"fmt"
-	"log"
 	"os/exec"
 	"strings"
-
+    "fmt"
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
 )
@@ -15,6 +13,15 @@ type Model struct {
 	choice   string
 	err      string
 	quitting bool
+}
+
+type checkoutMsg struct {err error}
+
+func checkout(branch string) tea.Cmd {
+    c := exec.Command("git", "checkout", branch)
+    return tea.ExecProcess(c, func(err error) tea.Msg {
+        return checkoutMsg{err}
+    })
 }
 
 func (m Model) Init() tea.Cmd {
@@ -37,17 +44,17 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			i, ok := m.list.SelectedItem().(Item)
 			if ok {
 				branch := strings.TrimLeft(string(i), "*")
-				m.choice = strings.TrimSpace(branch)
-
-				out, err := exec.Command("git", "checkout", m.choice).CombinedOutput()
-                fmt.Println("OUT", out)
-				if err != nil {
-					log.Fatal("Checkout Error: ", err)
-				}
-				m.err = string(out)
+				branch = strings.TrimSpace(branch)
+				m.choice = branch
 			}
-			return m, tea.Quit
+			return m, checkout(m.choice)
 		}
+
+    case checkoutMsg:
+        if msg.err != nil {
+            return m, tea.Quit
+        } 
+        return m, tea.Quit
 	}
 	var cmd tea.Cmd
 	m.list, cmd = m.list.Update(msg)
@@ -55,12 +62,11 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m Model) View() string {
-
 	if m.err != "" {
 		return QuitCheckoutStyle.Render(m.err)
 	}
 	if m.choice != "" {
-		return fmt.Sprintf("switch to branch '%s'", m.choice)
+		return QuitCheckoutStyle.Render(fmt.Sprintf("Switched to branch '%s'", m.choice))
 	}
 	if m.quitting {
 		return QuitTextStyle.Render("Not hungry? That’s cool.")
