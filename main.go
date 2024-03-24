@@ -78,7 +78,7 @@ func main() {
     }
 	// Assert the final tea.Model to our local model and print the choice.
 	if m, ok := m.(Model); ok && m.choice != "" {
-        p.ReleaseTerminal()
-		// fmt.Printf("\n---\nYou chose %s!\n", m.choice)
+        p.Kill()
+		fmt.Printf("\n---\nYou chose %s!\n", m.choice)
 	}
 }
