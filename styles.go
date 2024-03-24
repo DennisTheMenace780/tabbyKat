@@ -13,7 +13,7 @@ var (
 	ItemStyle         = lipgloss.NewStyle().PaddingLeft(4)
 	SelectedItemStyle = lipgloss.NewStyle().PaddingLeft(2).Foreground(lipgloss.Color("002"))
 	PaginationStyle   = list.DefaultStyles().PaginationStyle.PaddingLeft(4)
-	HelpStyle         = list.DefaultStyles().HelpStyle.PaddingLeft(4).PaddingBottom(1)
+	HelpStyle         = list.DefaultStyles().HelpStyle.PaddingLeft(4).PaddingBottom(2)
 	QuitTextStyle     = lipgloss.NewStyle().Margin(1, 0, 2, 4)
 	QuitCheckoutStyle = lipgloss.NewStyle().Margin(1)
 	ModifiedFiles     = lipgloss.NewStyle().PaddingLeft(8).Foreground(lipgloss.Color("002"))

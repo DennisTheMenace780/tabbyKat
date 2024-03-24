@@ -12,7 +12,7 @@ import (
 )
 
 func init() {
-    // Will run at startup and log to a file
+	// Will run at startup and log to a file
 	if len(os.Getenv("DEBUG")) > 0 {
 		f, err := tea.LogToFile("debug.log", "debug")
 		if err != nil {
@@ -27,9 +27,9 @@ func main() {
 	cmd := exec.Command("git", "branch")
 	// Get a pipe to read from standard out
 	r, err := cmd.StdoutPipe()
-    if err != nil {
-        log.Fatalf("Error creating stdout pipe: %s", err)
-    }
+	if err != nil {
+		log.Fatalf("Error creating stdout pipe: %s", err)
+	}
 	cmd.Stderr = cmd.Stdout
 	// Make a new channel which will be used to ensure we get all output
 	done := make(chan struct{})
@@ -43,8 +43,8 @@ func main() {
 		for scanner.Scan() {
 			line := scanner.Text()
 			if strings.Contains(line, "not a git repository") {
-                fmt.Println(line)
-                os.Exit(1)
+				fmt.Println(line)
+				os.Exit(1)
 			}
 			branches = append(branches, line)
 		}
@@ -62,7 +62,7 @@ func main() {
 
 	branchItems := BuildItems(branches)
 	if err != nil {
-        log.Print("Error: ", err)
+		log.Print("Error: ", err)
 	}
 	l := ListBuilder(branchItems)
 
@@ -71,14 +71,7 @@ func main() {
 		log.Print("Error: ", err)
 	}
 
-    p := tea.NewProgram(Model{list: l})
-    m, err := p.Run()
-    if err != nil {
-        log.Fatal(err)
-    }
-	// Assert the final tea.Model to our local model and print the choice.
-	if m, ok := m.(Model); ok && m.choice != "" {
-        p.Kill()
-		fmt.Printf("\n---\nYou chose %s!\n", m.choice)
+	if _, err := tea.NewProgram(Model{list: l}).Run(); err != nil {
+		log.Fatal(err)
 	}
 }
