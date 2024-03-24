@@ -71,7 +71,14 @@ func main() {
 		log.Print("Error: ", err)
 	}
 
-	if _, err := tea.NewProgram(Model{list: l}).Run(); err != nil {
-		log.Fatal(err)
+    p := tea.NewProgram(Model{list: l})
+    m, err := p.Run()
+    if err != nil {
+        log.Fatal(err)
+    }
+	// Assert the final tea.Model to our local model and print the choice.
+	if m, ok := m.(Model); ok && m.choice != "" {
+        p.ReleaseTerminal()
+		// fmt.Printf("\n---\nYou chose %s!\n", m.choice)
 	}
 }

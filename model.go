@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"os/exec"
 	"strings"
 
@@ -67,9 +66,9 @@ func (m Model) View() string {
 	// if m.err != "" {
 	// 	return QuitCheckoutStyle.Render(m.err)
 	// }
-	if m.choice != "" {
-		return QuitCheckoutStyle.Render(fmt.Sprintf("Switching to branch ... '%s'", m.choice))
-	}
+	// if m.choice != "" {
+	// 	return QuitCheckoutStyle.Render(fmt.Sprintf("Switching to branch ... '%s'", m.choice))
+	// }
 	// if m.quitting {
 	// 	return QuitTextStyle.Render("Not hungry? That’s cool.")
 	// }
