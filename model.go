@@ -67,6 +67,9 @@ func (m Model) View() string {
 	// 	return QuitCheckoutStyle.Render(m.err)
 	// }
 	if m.choice != "" {
+        // // creates a nice clean return, but i'd love to just send git
+        // checkout branch
+        // return ""
 		return QuitCheckoutStyle.Render("checking out")
 	}
 	// if m.quitting {

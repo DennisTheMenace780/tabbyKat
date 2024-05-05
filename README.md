@@ -16,8 +16,12 @@ order to ensure the program behaves as expected.
 3. Run `go test -v ./..` to execute the tests recursively
 
 ### Uninstall Instructions
-
 ```bash
 cd /usr/local/bin/
 sudo rm -rf TabbyKat
+```
+## Building Binary
+```go
+GOOD=darwin GOARCH=amd644 go build -o mac-tabbykat
+GOOD=linux GOARCH=amd644 go build -o mac-linux
 ```
