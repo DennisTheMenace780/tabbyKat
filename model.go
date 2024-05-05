@@ -11,7 +11,6 @@ import (
 type Model struct {
 	list     list.Model
 	choice   string
-	err      string
 	quitting bool
 }
 
