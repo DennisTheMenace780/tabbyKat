@@ -71,7 +71,7 @@ func main() {
 		log.Print("Error: ", err)
 	}
 
-	if _, err := tea.NewProgram(Model{list: l}).Run(); err != nil {
+	if _, err := tea.NewProgram(Model{list: l}, tea.WithAltScreen()).Run(); err != nil {
 		log.Fatal(err)
 	}
 }
