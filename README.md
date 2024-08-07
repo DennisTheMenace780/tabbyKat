@@ -22,6 +22,6 @@ sudo rm -rf TabbyKat
 ```
 ## Building Binary
 ```go
-GOOD=darwin GOARCH=amd644 go build -o mac-tabbykat
-GOOD=linux GOARCH=amd644 go build -o mac-linux
+GOOD=darwin GOARCH=amd64 go build -o mac-tabbykat
+GOOD=linux GOARCH=amd64 go build -o mac-linux
 ```
