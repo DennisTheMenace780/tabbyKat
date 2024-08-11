@@ -3,13 +3,22 @@
 A Git tool developed in Golang that allows you to tab through your open branches and check them out seemlessly.
 
 ### Installation Instructions
-Clone the repository 
 ```bash
-git clone git@github.com:DennisTheMenace780/tabbyKat.git /usr/local/bin/
+git clone git@github.com:DennisTheMenace780/tabbyKat.git /tmp/tabbyKat
+sudo mv /tmp/tabbyKat/tabbyKat /usr/local/bin/
+rm -rf /tmp/tabbyKat
+```
+### Uninstall Instructions
+```bash
+cd /usr/local/bin/
+# Darwin (MacOS)
+sudo rm /usr/local/bin/mac-tabbyKat
+# Linux
+sudo rm /usr/local/bin/linux-tabbyKat
 ```
 ### How to run the tests
 
-Because Tabbykat operates within a git repository, one needs to be created in
+Because tabbyKat is a thin wrapper around git, a git repository needs to be created in
 order to ensure the program behaves as expected. 
 
 1. Run `./bin/init_test_repo.sh` to create the `TestRepo` sub-module.
@@ -17,13 +26,8 @@ order to ensure the program behaves as expected.
    for testing](https://charm.sh/blog/teatest/)
 3. Run `go test -v ./...` to execute the tests recursively
 
-### Uninstall Instructions
-```bash
-cd /usr/local/bin/
-sudo rm -rf tabbyKat
-```
-## Building Binary
+### Building Binary
 ```go
 GOOD=darwin GOARCH=amd64 go build -o mac-tabbykat
-GOOD=linux GOARCH=amd64 go build -o mac-linux
+GOOD=linux GOARCH=amd64 go build -o linux-tabbykat
 ```
