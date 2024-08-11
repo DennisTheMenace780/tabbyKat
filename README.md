@@ -31,3 +31,13 @@ order to ensure the program behaves as expected.
 GOOD=darwin GOARCH=amd64 go build -o mac-tabbykat
 GOOD=linux GOARCH=amd64 go build -o linux-tabbykat
 ```
+### To Do
+- [ ] Fetch the upstream branch if it exists to see if it is gone. This is
+similar to what you see in Lazygit but just a little more compact.
+- [ ] Add a feature that allows you to type in the parent/sub-task number and
+the name of the branch and have it auto create
+`JOB-100827/JOB-18887/some-sub-task-name` for you. 
+- [ ] Add last commit in days to get a sense of how long it has been since the
+branch has been in use.
+- [ ] If the branch is a feature branch, write it as `<sub-task-number> ->
+JOB-xxxxxx/JOB-zzzzz/branch-name`

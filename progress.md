@@ -1,3 +1,11 @@
+Aug 10, 2024
+--
+A small improvement was made to fix the strange rendering issue that I was
+experiencing. The fix involes using the `tea.WithAltScreen()` function as a
+program option. This option writes the Bubble Tea output to an alternate buffer,
+which means that when the git command executes we're freeing up `stdout` for the
+native git output. 
+
 March 19, 2024
 --
 I got the version two of the project up and running again, so I feel comfortable
