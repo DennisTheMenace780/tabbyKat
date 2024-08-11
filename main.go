@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"io"
 	"log"
 	"os"
 	"os/exec"
@@ -12,7 +13,7 @@ import (
 )
 
 func init() {
-	// Will run at startup and log to a file
+    // init functions in Go will run before the main execution thead
 	if len(os.Getenv("DEBUG")) > 0 {
 		f, err := tea.LogToFile("debug.log", "debug")
 		if err != nil {
@@ -24,54 +25,71 @@ func init() {
 }
 
 func main() {
-	cmd := exec.Command("git", "branch")
-	// Get a pipe to read from standard out
-	r, err := cmd.StdoutPipe()
+	branches, err := getGitBranches()
 	if err != nil {
-		log.Fatalf("Error creating stdout pipe: %s", err)
+		log.Fatalf("Error: %s", err)
 	}
-	cmd.Stderr = cmd.Stdout
-	// Make a new channel which will be used to ensure we get all output
-	done := make(chan struct{})
-	// Create a scanner which scans r in a line-by-line fashion
-	scanner := bufio.NewScanner(r)
-	// Use the scanner to scan the output line by line and log it
-	// It's running in a goroutine so that it doesn't block
-	var branches []string
-	go func() {
-		// Read line by line and process it
-		for scanner.Scan() {
-			line := scanner.Text()
-			if strings.Contains(line, "not a git repository") {
-				fmt.Println(line)
-				os.Exit(1)
-			}
-			branches = append(branches, line)
-		}
-		// We're all done, unblock the channel
-		done <- struct{}{}
-	}()
-	// Start the command and check for errors
-	err = cmd.Start()
-	if err != nil {
-		log.Fatal("Error: ", err)
-	}
-
-	// Wait for all output to be processed
-	<-done
 
 	branchItems := BuildItems(branches)
-	if err != nil {
-		log.Print("Error: ", err)
-	}
-	l := ListBuilder(branchItems)
-
-	err = cmd.Wait()
-	if err != nil {
-		log.Print("Error: ", err)
-	}
+	l := BuildListFromItems(branchItems)
 
 	if _, err := tea.NewProgram(Model{list: l}, tea.WithAltScreen()).Run(); err != nil {
 		log.Fatal(err)
 	}
+}
+
+func getGitBranches() ([]string, error) {
+	cmd := exec.Command("git", "branch")
+	pr, err := cmd.StdoutPipe()
+	if err != nil {
+		return nil, fmt.Errorf("error creating stdout pipe: %w", err)
+	}
+	cmd.Stderr = cmd.Stdout
+
+	if err := cmd.Start(); err != nil { // cmd.Start() spawns a new process
+		return nil, fmt.Errorf("error starting command: %w", err)
+	}
+
+    // The output of the process from 49 will be streamed to the pipe when it
+    // begins to execute, and then we can operate on it concurrently with
+    // another go routine.
+	branches, err := captureCmdOutput(pr)
+	if err != nil {
+		return nil, fmt.Errorf("error capturing command output: %w", err)
+	}
+
+	if err := cmd.Wait(); err != nil {
+		return nil, fmt.Errorf("error waiting for command to finish: %w", err)
+	}
+
+	return branches, nil
+}
+
+func captureCmdOutput(r io.Reader) ([]string, error) {
+	scanner := bufio.NewScanner(r)
+	var branches []string
+	done := make(chan error)
+
+    // The goroutine allows the program to create a lightweight thread to parse
+    // the output of the command that was written to the io.Reader instance.
+    // This approach means that the output of the command will be streamed to
+    // the pipe and then the go routine can operate on those lines as they're
+    // coming in to ensure we're not blocking the main thread of execution. 
+	go func() { 
+		for scanner.Scan() {
+			line := scanner.Text()
+			if strings.Contains(line, "not a git repository") {
+				done <- fmt.Errorf(line)
+				return
+			}
+			branches = append(branches, line)
+		}
+		done <- scanner.Err()
+	}()
+
+	if err := <-done; err != nil {
+		return nil, fmt.Errorf("error reading command output: %w", err)
+	}
+
+	return branches, nil
 }
