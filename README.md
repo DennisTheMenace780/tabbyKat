@@ -1,5 +1,7 @@
 # TabbyKat
 
+A Git tool developed in Golang that allows you to tab through your open branches and check them out seemlessly.
+
 ### Installation Instructions
 Clone the repository 
 ```bash
@@ -13,12 +15,12 @@ order to ensure the program behaves as expected.
 1. Run `./bin/init_test_repo.sh` to create the `TestRepo` sub-module.
 2. Run `go test -v ./... -update` to create `.golden` files used by [Bubble Tea
    for testing](https://charm.sh/blog/teatest/)
-3. Run `go test -v ./..` to execute the tests recursively
+3. Run `go test -v ./...` to execute the tests recursively
 
 ### Uninstall Instructions
 ```bash
 cd /usr/local/bin/
-sudo rm -rf TabbyKat
+sudo rm -rf tabbyKat
 ```
 ## Building Binary
 ```go
