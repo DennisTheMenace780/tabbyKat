@@ -62,17 +62,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m Model) View() string {
-	// if m.err != "" {
-	// 	return QuitCheckoutStyle.Render(m.err)
-	// }
-	if m.choice != "" {
-        // // creates a nice clean return, but i'd love to just send git
-        // checkout branch
-        // return ""
-		return QuitCheckoutStyle.Render("checking out")
-	}
-	// if m.quitting {
-	// 	return QuitTextStyle.Render("Not hungry? That’s cool.")
-	// }
+    // Since we're deferring program output to the alternate screen, we don't
+    // need to do anything else here except return the View() of the list.
 	return "\n" + m.list.View()
 }
