@@ -5,7 +5,6 @@ import (
 	"io"
 	"strings"
 
-	"github.com/charmbracelet/bubbles/key"
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
 )
@@ -44,7 +43,7 @@ func BuildItems(branches []string) []list.Item {
 	return items
 }
 
-func ListBuilder(items []list.Item) list.Model {
+func BuildListFromItems(items []list.Item) list.Model {
 	l := list.New(items, ItemDelegate{}, DefaultWidth, ListHeight)
 	l.Title = TitleDescription
 	l.SetShowStatusBar(false)
@@ -52,52 +51,6 @@ func ListBuilder(items []list.Item) list.Model {
 	l.Styles.Title = TitleStyle
 	l.Styles.PaginationStyle = PaginationStyle
 	l.Styles.HelpStyle = HelpStyle
-	l.KeyMap = defaultKeyMap()
+	l.KeyMap = DefaultKeyMap()
 	return l
-}
-
-func defaultKeyMap() list.KeyMap {
-	return list.KeyMap{
-		// Browsing.
-		CursorUp: key.NewBinding(
-			key.WithKeys("up", "k", "shift+tab"),
-			key.WithHelp("↑/k", "up"),
-		),
-		CursorDown: key.NewBinding(
-			key.WithKeys("down", "j", "tab"),
-			key.WithHelp("↓/j", "down"),
-		),
-		PrevPage: key.NewBinding(
-			key.WithKeys("left", "h", "pgup", "b", "u"),
-			key.WithHelp("←/h/pgup", "prev page"),
-		),
-		NextPage: key.NewBinding(
-			key.WithKeys("right", "l", "pgdown", "f", "d"),
-			key.WithHelp("→/l/pgdn", "next page"),
-		),
-		GoToStart: key.NewBinding(
-			key.WithKeys("home", "g"),
-			key.WithHelp("g/home", "go to start"),
-		),
-		GoToEnd: key.NewBinding(
-			key.WithKeys("end", "G"),
-			key.WithHelp("G/end", "go to end"),
-		),
-		// Toggle help.
-		ShowFullHelp: key.NewBinding(
-			key.WithKeys("?"),
-			key.WithHelp("?", "more"),
-		),
-		CloseFullHelp: key.NewBinding(
-			key.WithKeys("?"),
-			key.WithHelp("?", "close help"),
-		),
-
-		// Quitting.
-		Quit: key.NewBinding(
-			key.WithKeys("q", "esc"),
-			key.WithHelp("q", "quit"),
-		),
-		ForceQuit: key.NewBinding(key.WithKeys("ctrl+c")),
-	}
 }
